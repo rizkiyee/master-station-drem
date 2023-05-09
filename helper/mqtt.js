@@ -47,6 +47,7 @@ const client = mqtt.connect(connectUrl, {
 
 let triggerRule;
 let serviceRule;
+let rule;
 client.on('connect', () => {
     ruleModel.get().then(result => {
         console.log('Connected')
@@ -55,7 +56,7 @@ client.on('connect', () => {
             // console.log(topic);
             triggerRule = 'trigger_id: ' + value.trigger_id + ' trigger_val : ' + value.trigger_val;
             serviceRule = 'service_id: ' + value.service_id + ' service_val : ' + value.service_val;
-            rule = `{}`
+            rule = `{"trigger_id" : "${value.trigger_id}", "trigger_val" : "${value.trigger_val}", "service_id" : "${value.service_id}", "service_val" : "${value.service_val}"}`
             client.subscribe('trigger', () => {
                 // console.log(`Subscribe to topic '${topic}'`);
             })
@@ -65,17 +66,21 @@ client.on('connect', () => {
             client.subscribe('rule', () => {
 
             })
-            client.publish('trigger', 'rule: ' + triggerRule, { qos: 0, retain: false }, (error) => {
+            client.publish('trigger', 'rule trigger: ' + triggerRule, { qos: 0, retain: false }, (error) => {
                 if (error) {
                     console.error(error);
                 }
             })
-            client.publish('service', 'rule: ' + serviceRule, { qos: 0, retain: false }, (error) => {
+            client.publish('service', 'rule service: ' + serviceRule, { qos: 0, retain: false }, (error) => {
                 if (error) {
                     console.log(error);
                 }
             })
-            client.publish('rule', '')
+            client.publish('rule', rule, { qos: 0, retain: false }, (error) => {
+                if (error) {
+                    console.log(error);
+                }
+            })
         })
         client.on('message', (topic, payload) => {
             console.log('Received Message:', payload.toString())
