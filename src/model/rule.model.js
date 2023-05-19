@@ -16,6 +16,18 @@ const ruleModel = {
             );
         });
     },
+    cekTrigger: (trigger_id, trigger_val) => {
+        return new Promise((resolve, reject) => {
+            db.query(`SELECT service_id, service_val from rule WHERE trigger_id=
+            '${trigger_id}' and trigger_val='${trigger_val}'`, (err, result) => {
+                if (err) {
+                    return reject(err.message);
+                } else {
+                    return resolve(result.rows[0]);
+                }
+            });
+        });
+    },
     getDetail: (id) => {
         return new Promise((resolve, reject) => {
             db.query(`SELECT * from rule WHERE id='${id}'`, (err, result) => {
@@ -27,7 +39,7 @@ const ruleModel = {
             });
         });
     },
-    add: ({ id, t_dev_id, t_dev_name, t_dev_value, t_dev_mac, s_dev_id, s_dev_name, s_dev_mac, rule_topic }) => {
+    add: ({ id, trigger_id, trigger_val, service_id, service_val }) => {
         return new Promise((resolve, reject) => {
             db.query(
                 `INSERT INTO rule (id,trigger_id, trigger_val, service_id, service_val) VALUES ('${id}','${t_dev_id}','${t_dev_name}', '${t_dev_value}', '${t_dev_mac}', '${s_dev_id}', '${s_dev_name}', '${s_dev_mac}', '${rule_topic}') RETURNING id`,
@@ -75,5 +87,6 @@ const ruleModel = {
         });
     }
 }
+
 
 module.exports = ruleModel;

@@ -13,6 +13,21 @@ const ruleController = {
                 return res.status(500).send({ message: error });
             });
     },
+    cekTrigger: (req, res) => {
+        console.log(req.params);
+        return ruleModel
+            .cekTrigger(req.body.trigger_id, req.body.trigger_val)
+            .then((result) => {
+                if (result != null) {
+                    return res.status(200).send({ message: "success", data: result });
+                } else {
+                    return res.status(400).send({ message: "error" });
+                }
+            })
+            .catch((error) => {
+                return res.status(500).send({ message: error });
+            });
+    },
     getDetail: (req, res) => {
         return ruleModel
             .getDetail(req.params.id)
@@ -20,7 +35,7 @@ const ruleController = {
                 if (result != null) {
                     return res.status(200).send({ message: "success", data: result });
                 } else {
-                    return res.status(400).send({ message: "id not found" });
+                    return res.status(400).send({ message: "error" });
                 }
             })
             .catch((error) => {
