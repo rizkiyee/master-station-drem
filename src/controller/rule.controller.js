@@ -34,6 +34,7 @@ const ruleController = {
             .cekTrigger(req.body.trigger_id, req.body.trigger_val)
             .then((result) => {
                 if (result != null) {
+                    //gaperlu client on
                     let serviceRule = 'service_id: ' + result.service_id + ' service_val : ' + result.service_val;
                     client.subscribe('service', () => {
 
