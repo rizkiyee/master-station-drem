@@ -1,13 +1,28 @@
 const ruleModel = require("../model/rule.model");
+const mqtt = require('mqtt');
+// const ruleController = require('../src/controller/rule.controller');
+// // const ruleModel = require('../src/model/rule.model');
+
+const host = 'test.mosquitto.org'
+const port = '1883'
+const clientId = `mqtt_${Math.random().toString(16).slice(3)}`
+
+const connectUrl = `mqtt://${host}:${port}`
+const client = mqtt.connect(connectUrl, {
+    clientId,
+    clean: true,
+    connectTimeout: 4000,
+    // username: 'emqx',
+    // password: 'public',
+    reconnectPeriod: 1000,
+})
 
 const ruleController = {
     get: (req, res) => {
         return ruleModel
             .get(req.query)
             .then((result) => {
-                return res
-                    .status(200)
-                    .send({ message: "success", data: result, status: 200 });
+                return res.status(200).send({ message: "success", data: result, status: 200 });
             })
             .catch((error) => {
                 return res.status(500).send({ message: error });
@@ -19,7 +34,21 @@ const ruleController = {
             .cekTrigger(req.body.trigger_id, req.body.trigger_val)
             .then((result) => {
                 if (result != null) {
-                    return res.status(200).send({ message: "success", data: result });
+                    let serviceRule = 'service_id: ' + result.service_id + ' service_val : ' + result.service_val;
+                    client.subscribe('service', () => {
+
+                    })
+                    console.log(result);
+                    client.publish('service', 'service: ' + serviceRule, { qos: 0, retain: false }, (error) => {
+                        if (error) {
+                            console.log(error);
+                        }
+                    })
+                    client.on('message', (topic, payload) => {
+                        console.log('Received Message:', payload.toString())
+                    })
+
+                    res.status(200).send({ message: "success", data: result });
                 } else {
                     return res.status(400).send({ message: "error" });
                 }
