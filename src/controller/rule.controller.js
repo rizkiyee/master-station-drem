@@ -35,12 +35,12 @@ const ruleController = {
             .then((result) => {
                 if (result != null) {
                     //gaperlu client on
-                    let serviceRule = 'service_id: ' + result.service_id + ' service_val : ' + result.service_val;
+                    let serviceRule = 'service_id: ' + result.service_id + ' service_val: ' + result.service_val;
                     client.subscribe('service', () => {
 
                     })
                     console.log(result);
-                    client.publish('service', 'service: ' + serviceRule, { qos: 0, retain: false }, (error) => {
+                    client.publish('service', serviceRule, { qos: 0, retain: false }, (error) => {
                         if (error) {
                             console.log(error);
                         }
@@ -48,7 +48,6 @@ const ruleController = {
                     client.on('message', (topic, payload) => {
                         console.log('Received Message:', payload.toString())
                     })
-
                     res.status(200).send({ message: "success", data: result });
                 } else {
                     return res.status(400).send({ message: "error" });
@@ -58,6 +57,37 @@ const ruleController = {
                 return res.status(500).send({ message: error });
             });
     },
+    // cekTrigger: (req, res) => {
+    //     console.log(req.body);
+    //     return ruleModel
+    //         .cekTrigger(req.body.id)
+    //         .then((result) => {
+    //             if (result != null) {
+    //                 //gaperlu client on
+    //                 let serviceRule = 'trigger_id: ' + result.trigger_id + ' trigger_val: ' + result.trigger_val +
+    //                     ' service_id: ' + result.service_id + ' service_val: ' + result.service_val;
+    //                 client.subscribe('service', () => {
+
+    //                 })
+    //                 console.log(result);
+    //                 client.publish('service', serviceRule, { qos: 0, retain: false }, (error) => {
+    //                     if (error) {
+    //                         console.log(error);
+    //                     }
+    //                 })
+    //                 client.on('message', (topic, payload) => {
+    //                     console.log('Received Message:', payload.toString())
+    //                 })
+
+    //                 res.status(200).send({ message: "success", data: result });
+    //             } else {
+    //                 return res.status(400).send({ message: "error" });
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             return res.status(500).send({ message: error });
+    //         });
+    // },
     getDetail: (req, res) => {
         return ruleModel
             .getDetail(req.params.id)

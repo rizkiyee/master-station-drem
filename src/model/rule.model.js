@@ -28,6 +28,18 @@ const ruleModel = {
             });
         });
     },
+    // cekTrigger: (id) => {
+    //     return new Promise((resolve, reject) => {
+    //         db.query(`SELECT trigger_id, trigger_val, service_id, service_val from rule WHERE id=
+    //         '${id}'`, (err, result) => {
+    //             if (err) {
+    //                 return reject(err.message);
+    //             } else {
+    //                 return resolve(result.rows[0]);
+    //             }
+    //         });
+    //     });
+    // },
     getDetail: (id) => {
         return new Promise((resolve, reject) => {
             db.query(`SELECT * from rule WHERE id='${id}'`, (err, result) => {
