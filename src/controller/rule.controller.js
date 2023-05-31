@@ -29,25 +29,20 @@ const ruleController = {
             });
     },
     cekTrigger: (req, res) => {
-        console.log(req.params);
         return ruleModel
             .cekTrigger(req.body.trigger_id, req.body.trigger_val)
             .then((result) => {
                 if (result != null) {
-                    //gaperlu client on
-                    let serviceRule = 'service_id: ' + result.service_id + ' service_val: ' + result.service_val;
+                    let serviceRule = '{"service_id": ' + result.service_id + ', "service_val": ' + result.service_val + '}';
                     client.subscribe('service', () => {
 
-                    })
+                    });
                     console.log(result);
                     client.publish('service', serviceRule, { qos: 0, retain: false }, (error) => {
                         if (error) {
                             console.log(error);
                         }
-                    })
-                    client.on('message', (topic, payload) => {
-                        console.log('Received Message:', payload.toString())
-                    })
+                    });
                     res.status(200).send({ message: "success", data: result });
                 } else {
                     return res.status(400).send({ message: "error" });

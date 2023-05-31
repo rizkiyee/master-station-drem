@@ -10,15 +10,6 @@ router.post("/cek", ruleController.cekTrigger);
 router.post("/", ruleController.add);
 router.patch("/", ruleController.update);
 router.delete("/:id", ruleController.remove);
-// router.put('/', testController.update)
-// router.patch(
-//   "/:id",
-//   verifyToken,
-//   formUpload.array("img"),
-//   testController.update
-// );
-// router.delete("/:id", testController.remove);
 
-// delete //remove
 
 module.exports = router;
