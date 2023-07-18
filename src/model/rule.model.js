@@ -2,7 +2,7 @@ const db = require("../../helper/connection");
 
 const ruleModel = {
     get: function (queryParams) {
-        console.log(queryParams);
+        // console.log(queryParams);
         return new Promise((resolve, reject) => {
             db.query(
                 `SELECT id, trigger_id, trigger_val, service_id, service_val FROM rule`,
