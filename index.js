@@ -44,7 +44,7 @@ const client = mqtt.connect(connectUrl, {
 })
 
 client.on('connect', () => {
-  console.log('Connected to MQTT broker');
+  console.log('Master Station Connected to MQTT broker');
   client.subscribe('trigger', () => {
 
   });
@@ -53,6 +53,7 @@ client.on('connect', () => {
 client.on('message', (topic, payload) => {
   if (topic === 'trigger') {
     const mqttMessage = payload.toString();
+    console.log("Data yang diterima dari device trigger: ", mqttMessage);
     const requestData = JSON.parse(mqttMessage);
     ruleController.cekTrigger({ body: requestData }, {
       status: (statusCode) => {
