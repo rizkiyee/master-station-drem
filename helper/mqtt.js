@@ -36,8 +36,7 @@ client.on('connect', () => {
     ruleModel.get().then(result => {
         console.log('MQTT Connected')
         result.forEach(value => {
-            rule = `{"trigger_id" : "${value.trigger_id}", "trigger_val" : "${value.trigger_val}", 
-                    "service_id" : "${value.service_id}", "service_val" : "${value.service_val}"}`
+            rule = `{"trigger_id" : "${value.trigger_id}", "trigger_val" : "${value.trigger_val}", "service_id" : "${value.service_id}", "service_val" : "${value.service_val}"}`;
             client.subscribe('rule', () => {
 
             })
